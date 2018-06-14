@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -37,12 +40,36 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         //force orientation to portrait
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        //check for hockey app updates
+        checkForUpdates();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // ... your own onResume implementation
+        checkForCrashes();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mUnbinder.unbind();
+        unregisterManagers();
+    }
+
+    private void checkForUpdates() {
+        // Remove this for store builds!
+        UpdateManager.register(this);
+    }
+
+    private void unregisterManagers() {
+        UpdateManager.unregister();
+    }
+
+    private void checkForCrashes() {
+        CrashManager.register(this);
     }
 
     @LayoutRes
