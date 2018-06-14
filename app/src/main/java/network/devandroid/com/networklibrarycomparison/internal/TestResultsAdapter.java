@@ -23,8 +23,11 @@ public class TestResultsAdapter extends RecyclerView.Adapter<TestResultsAdapter.
 
     private List<Map.Entry<NetType, Long>> mEntries;
 
-    public TestResultsAdapter(Set<Map.Entry<NetType, Long>> entries) {
+    private int mNumberOfTests;
+
+    public TestResultsAdapter(Set<Map.Entry<NetType, Long>> entries, int numberOfTests) {
         this.mEntries = new ArrayList<>(entries);
+        mNumberOfTests = numberOfTests;
         //sort
         Collections.sort(mEntries, new Comparator<Map.Entry<NetType, Long>>() {
             @Override
@@ -58,7 +61,7 @@ public class TestResultsAdapter extends RecyclerView.Adapter<TestResultsAdapter.
         }
         holder.mResult.setText(":");
         holder.mTitle.setText(entry.getKey().name());
-        holder.mValue.setText(String.valueOf(entry.getValue()));
+        holder.mValue.setText(String.valueOf(entry.getValue() / mNumberOfTests));
     }
 
     @Override

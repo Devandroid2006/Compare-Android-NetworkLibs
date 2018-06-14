@@ -124,32 +124,32 @@ public class MainActivity extends BaseActivity {
                 handleAllNetTypes();
                 break;
             case VOLLEY:
-                for (int i = 0; i < getNumberOfIterations(); i++) {
+                for (int i = 0; i < getNumberOfTests(); i++) {
                     handleVolleyNetType();
                 }
                 break;
             case RETROFIT:
-                for (int i = 0; i < getNumberOfIterations(); i++) {
+                for (int i = 0; i < getNumberOfTests(); i++) {
                     handleRetrofitNetType();
                 }
                 break;
             case OK_HTTP:
-                for (int i = 0; i < getNumberOfIterations(); i++) {
+                for (int i = 0; i < getNumberOfTests(); i++) {
                     handleOkHttpNetType();
                 }
                 break;
             case FAST_NETWORK:
-                for (int i = 0; i < getNumberOfIterations(); i++) {
+                for (int i = 0; i < getNumberOfTests(); i++) {
                     handleFastNetType();
                 }
                 break;
             case ASYNC_TASK:
-                for (int i = 0; i < getNumberOfIterations(); i++) {
+                for (int i = 0; i < getNumberOfTests(); i++) {
                     handleAsyncTaskNetType();
                 }
                 break;
             case RXJAVA:
-                for (int i = 0; i < getNumberOfIterations(); i++) {
+                for (int i = 0; i < getNumberOfTests(); i++) {
                     handleRxJavaNetType();
                 }
                 break;
@@ -363,8 +363,9 @@ public class MainActivity extends BaseActivity {
                     avgTimeMap.put(netType, timeTaken + avgTimeMap.get(netType));
                 }
             }
+
             //setup results
-            final TestResultsAdapter adapter = new TestResultsAdapter(avgTimeMap.entrySet());
+            final TestResultsAdapter adapter = new TestResultsAdapter(avgTimeMap.entrySet(), getNumberOfTests());
             mResultsRcView.setAdapter(adapter);
         }
 
@@ -380,7 +381,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void handleAllNetTypes() {
-        for (int i = 0; i < getNumberOfIterations(); i++) {
+        for (int i = 0; i < getNumberOfTests(); i++) {
             handleAsyncTaskNetType();
             handleFastNetType();
             handleOkHttpNetType();
@@ -394,7 +395,7 @@ public class MainActivity extends BaseActivity {
         return mUrlEtext.getText().toString();
     }
 
-    private int getNumberOfIterations() {
+    private int getNumberOfTests() {
         int value = 1;
         if (!TextUtils.isEmpty(mTestsEtext.getText())) {
             value = Integer.parseInt(mTestsEtext.getText().toString());
