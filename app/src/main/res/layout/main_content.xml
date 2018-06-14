@@ -29,8 +29,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/number_of_tests"
-                        android:inputType="number"
                         android:imeOptions="actionDone"
+                        android:inputType="number"
                         android:text="1"
                         android:textColor="@color/hockeyapp_text_black" />
                 </android.support.design.widget.TextInputLayout>
@@ -45,9 +45,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/webservice"
+                        android:imeOptions="actionDone"
                         android:inputType="textUri"
                         android:text="url"
-                        android:imeOptions="actionDone"
                         android:textColor="@color/hockeyapp_text_black" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -63,12 +63,12 @@
                         android:text="@string/select_the_netwrok_type"
                         android:textColor="@android:color/darker_gray" />
 
-                    <android.support.v7.widget.AppCompatSpinner
+                    <network.devandroid.com.networklibrarycomparison.widgets.SameItemSelector
                         android:id="@+id/spinner_network"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dimen_40dp"
-                        android:spinnerMode="dropdown"
-                        android:entries="@array/net_type" />
+                        android:entries="@array/net_type"
+                        android:spinnerMode="dropdown" />
                 </android.support.v7.widget.LinearLayoutCompat>
             </android.support.v7.widget.LinearLayoutCompat>
         </android.support.v7.widget.CardView>
