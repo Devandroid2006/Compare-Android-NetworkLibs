@@ -3,7 +3,8 @@
     <string name="select_the_netwrok_type">Network Type</string>
     <string name="number_of_tests">Number of Tests</string>
     <string name="webservice">Webservice</string>
-    <string name="content_details">Content Details</string>
+    <string name="content_details">Test Details</string>
+    <string name="err_invalid_url">Please enter valid GET URL</string>
     <string-array name="net_type">
         <item>None</item>
         <item>All</item>

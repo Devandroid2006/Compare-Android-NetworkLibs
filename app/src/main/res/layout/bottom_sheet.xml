@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:behavior_peekHeight="@dimen/dimen_50dp"
-    app:cardBackgroundColor="@color/hockeyapp_text_white"
-    app:cardElevation="@dimen/dimen_2dp"
+    app:cardCornerRadius="@dimen/dimen_5dp"
+    app:cardElevation="@dimen/dimen_3dp"
+    app:cardUseCompatPadding="true"
     app:layout_behavior="@string/bottom_sheet_behavior"
     tools:showIn="@layout/activity_main">
 
@@ -28,24 +29,12 @@
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/details_tview"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/results_rcview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="@dimen/dimen_8dp"
-            android:textColor="@color/hockeyapp_text_black" />
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_8dp">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/content_tview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/hockeyapp_text_black" />
-        </ScrollView>
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
     </android.support.v7.widget.LinearLayoutCompat>
 

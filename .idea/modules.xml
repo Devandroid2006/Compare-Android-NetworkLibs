@@ -6,8 +6,8 @@
       <module fileurl="file://D:/AndroidProjects/networklibrariescompare/NetworkLibraryComparison.iml" filepath="D:/AndroidProjects/networklibrariescompare/NetworkLibraryComparison.iml" />
       <module fileurl="file://$PROJECT_DIR$/NetworkLibraryComparison.iml" filepath="$PROJECT_DIR$/NetworkLibraryComparison.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Honeywell/NetworkLibraryComparison/.idea/networklibrariescompare.iml" filepath="$PROJECT_DIR$/../Honeywell/NetworkLibraryComparison/.idea/networklibrariescompare.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/networklibrariescompare.iml" filepath="$PROJECT_DIR$/.idea/networklibrariescompare.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Honeywell/NetworkLibraryComparison/.idea/networklibrariescompare.iml" filepath="$PROJECT_DIR$/../Honeywell/NetworkLibraryComparison/.idea/networklibrariescompare.iml" />
     </modules>
   </component>
 </project>

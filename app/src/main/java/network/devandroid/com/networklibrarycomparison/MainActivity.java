@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,7 +27,9 @@ import network.devandroid.com.networklibrarycomparison.internal.DataAdapter;
 import network.devandroid.com.networklibrarycomparison.internal.INetworkManager;
 import network.devandroid.com.networklibrarycomparison.internal.NetFactory;
 import network.devandroid.com.networklibrarycomparison.internal.NetType;
+import network.devandroid.com.networklibrarycomparison.internal.TestResultsAdapter;
 import network.devandroid.com.networklibrarycomparison.models.DataModel;
+import network.devandroid.com.networklibrarycomparison.utils.Validations;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,11 +50,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
-    @BindView(R.id.details_tview)
-    AppCompatTextView mDetailsTview;
-
-    @BindView(R.id.content_tview)
-    AppCompatTextView mContentTview;
+    @BindView(R.id.results_rcview)
+    RecyclerView mResultsRcView;
 
     //used to hold data model for each request
     private final List<DataModel> mList = Collections.synchronizedList(new ArrayList<DataModel>());
@@ -64,55 +62,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
+/*
+        mUrlEtext.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    mSpinnerNetwork.performClick();
+                    return true;
+                }
+                return false;
+            }
+        });*/
 
         mSpinnerNetwork.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "onItemSelected() called with: parent = [" + parent + "], view = [" + view + "], position = [" + position + "], id = [" + id + "]");
-                //reset the list
-                mList.clear();
-                mContentTview.setText("");
-                mDetailsTview.setText("");
-                updateList();
-                final NetType type = NetType.getNetType(position);
-                switch (type) {
-                    case ALL:
-                        handleAllNetTypes();
-                        break;
-                    case VOLLEY:
-                        for (int i = 0; i < getNumberOfIterations(); i++) {
-                            handleVolleyNetType();
-                        }
-                        break;
-                    case RETROFIT:
-                        for (int i = 0; i < getNumberOfIterations(); i++) {
-                            handleRetrofitNetType();
-                        }
-                        break;
-                    case OK_HTTP:
-                        for (int i = 0; i < getNumberOfIterations(); i++) {
-                            handleOkHttpNetType();
-                        }
-                        break;
-                    case FAST_NETWORK:
-                        for (int i = 0; i < getNumberOfIterations(); i++) {
-                            handleFastNetType();
-                        }
-                        break;
-                    case ASYNC_TASK:
-                        for (int i = 0; i < getNumberOfIterations(); i++) {
-                            handleAsyncTaskNetType();
-                        }
-                        break;
-                    case RXJAVA:
-                        for (int i = 0; i < getNumberOfIterations(); i++) {
-                            handleRxJavaNetType();
-                        }
-                        break;
-                    default:
-                        //do nothing
-                        break;
-                }
+                performSelectedNetworkTest(position);
             }
 
             @Override
@@ -125,6 +91,55 @@ public class MainActivity extends AppCompatActivity {
         mTestsEtext.setText(String.valueOf(1));
 
         checkForUpdates();
+    }
+
+    private void performSelectedNetworkTest(final int position) {
+        if (!Validations.isValidUrl(mUrlEtext.getText().toString())) {
+            Toast.makeText(MainActivity.this, R.string.err_invalid_url, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //reset the list
+        mList.clear();
+        updateList();
+        final NetType type = NetType.getNetType(position);
+        switch (type) {
+            case ALL:
+                handleAllNetTypes();
+                break;
+            case VOLLEY:
+                for (int i = 0; i < getNumberOfIterations(); i++) {
+                    handleVolleyNetType();
+                }
+                break;
+            case RETROFIT:
+                for (int i = 0; i < getNumberOfIterations(); i++) {
+                    handleRetrofitNetType();
+                }
+                break;
+            case OK_HTTP:
+                for (int i = 0; i < getNumberOfIterations(); i++) {
+                    handleOkHttpNetType();
+                }
+                break;
+            case FAST_NETWORK:
+                for (int i = 0; i < getNumberOfIterations(); i++) {
+                    handleFastNetType();
+                }
+                break;
+            case ASYNC_TASK:
+                for (int i = 0; i < getNumberOfIterations(); i++) {
+                    handleAsyncTaskNetType();
+                }
+                break;
+            case RXJAVA:
+                for (int i = 0; i < getNumberOfIterations(); i++) {
+                    handleRxJavaNetType();
+                }
+                break;
+            default:
+                //do nothing
+                break;
+        }
     }
 
     @Override
@@ -347,13 +362,9 @@ public class MainActivity extends AppCompatActivity {
                             avgTimeMap.put(netType, timeTaken + avgTimeMap.get(netType));
                         }
                     }
-                    //prepare the string
-                    final Set<NetType> keys = avgTimeMap.keySet();
-                    final StringBuilder sb = new StringBuilder();
-                    for (NetType type : keys) {
-                        sb.append(type.name()).append("       : ").append((avgTimeMap.get(type) / getNumberOfIterations())).append("(Avg Time)").append("\n\n");
-                    }
-                    mDetailsTview.setText(sb.toString());
+                    //setup results
+                    final TestResultsAdapter adapter = new TestResultsAdapter(avgTimeMap.entrySet());
+                    mResultsRcView.setAdapter(adapter);
                 }
             });
         }
@@ -362,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
 
     private synchronized boolean isAllNetworkApisFinished() {
         for (DataModel dataModel : mList) {
-            if (dataModel.getmEndTime() == 0) {
+            if (dataModel.getmEndTime() <= 0) {
                 return false;
             }
         }
