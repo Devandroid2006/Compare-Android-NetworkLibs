@@ -1,6 +1,8 @@
 package network.devandroid.com.networklibrarycomparison.volley;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -21,16 +23,26 @@ public class VolleyNetworkManager extends BaseNetworkManager<String> {
     public void send(String url) {
         final StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(final String response) {
                 if (null != mCallback) {
-                    mCallback.onResponse(response);
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCallback.onResponse(response);
+                        }
+                    });
                 }
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onErrorResponse(final VolleyError error) {
                 if (null != mCallback) {
-                    mCallback.onError(error.getLocalizedMessage());
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCallback.onError(error.getLocalizedMessage());
+                        }
+                    });
                 }
             }
         });

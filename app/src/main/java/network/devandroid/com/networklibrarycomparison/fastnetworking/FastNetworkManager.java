@@ -1,5 +1,8 @@
 package network.devandroid.com.networklibrarycomparison.fastnetworking;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
@@ -20,16 +23,26 @@ public class FastNetworkManager extends BaseNetworkManager<String> {
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(final String response) {
                         if (null != mCallback) {
-                            mCallback.onResponse(response);
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mCallback.onResponse(response);
+                                }
+                            });
                         }
                     }
 
                     @Override
-                    public void onError(ANError anError) {
-                        if (null != anError) {
-                            anError.getErrorBody();
+                    public void onError(final ANError anError) {
+                        if (null != mCallback) {
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mCallback.onError(anError.getLocalizedMessage());
+                                }
+                            });
                         }
                     }
                 });

@@ -2,19 +2,19 @@ apply plugin: 'com.android.application'
 
 android {
 //    prepare version
-    def file=file("version.properties")
-    def majorVer=1
-    def minorVer=0
-    def buildNum=1
+    def file = file("version.properties")
+    def majorVer = 1
+    def minorVer = 0
+    def buildNum = 1
 
-    if(file.canRead()){
-        Properties prop=new Properties()
+    if (file.canRead()) {
+        Properties prop = new Properties()
         prop.load(file.newInputStream())
-        majorVer=prop.getProperty("MAJOR").toInteger()
-        minorVer=prop.getProperty("MINOR").toInteger()
-        buildNum=prop.getProperty("BUILD").toInteger()
+        majorVer = prop.getProperty("MAJOR").toInteger()
+        minorVer = prop.getProperty("MINOR").toInteger()
+        buildNum = prop.getProperty("BUILD").toInteger()
     }
-    def verName="$majorVer.$minorVer.$buildNum"
+    def verName = "$majorVer.$minorVer.$buildNum"
 
     compileSdkVersion 27
     defaultConfig {
@@ -25,7 +25,7 @@ android {
         versionCode buildNum
         versionName verName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        setProperty("archivesBaseName","NetworkLibs-$verName")
+        setProperty("archivesBaseName", "NetworkLibs-$verName")
         manifestPlaceholders = [HOCKEYAPP_APP_ID: "30bd88f7c841493a86d4febd04d2977f"]
     }
     buildTypes {
@@ -62,4 +62,3 @@ dependencies {
 
     implementation 'net.hockeyapp.android:HockeySDK:5.1.0'
 }
-

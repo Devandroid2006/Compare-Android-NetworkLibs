@@ -19,7 +19,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
+            android:label="@string/test_screen"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,6 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ShowDetailsActivity"
+            android:label="@string/details"
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>

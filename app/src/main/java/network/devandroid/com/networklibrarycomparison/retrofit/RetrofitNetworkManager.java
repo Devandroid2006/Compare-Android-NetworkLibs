@@ -1,5 +1,8 @@
 package network.devandroid.com.networklibrarycomparison.retrofit;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import java.io.IOException;
 
 import network.devandroid.com.networklibrarycomparison.ICommonConstants;
@@ -21,20 +24,30 @@ public class RetrofitNetworkManager extends BaseNetworkManager<String> {
     public void send(String url) {
         getRetrofitService().getPhotoList().enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<ResponseBody> call, final Response<ResponseBody> response) {
                 if (null != mCallback) {
-                    try {
-                        mCallback.onResponse(response.body().string().toString());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                mCallback.onResponse(response.body().string().toString());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, final Throwable throwable) {
                 if (null != mCallback) {
-                    mCallback.onError(t.getLocalizedMessage());
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCallback.onError(throwable.getLocalizedMessage());
+                        }
+                    });
                 }
             }
         });

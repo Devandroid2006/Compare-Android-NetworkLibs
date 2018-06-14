@@ -1,5 +1,8 @@
 package network.devandroid.com.networklibrarycomparison.okhttp;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import java.io.IOException;
 
 import network.devandroid.com.networklibrarycomparison.internal.BaseNetworkManager;
@@ -26,16 +29,27 @@ public class OkHttpNetworkManager extends BaseNetworkManager<String> {
                 .build();
         client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Call call, final IOException e) {
                 if (null != mCallback) {
-                    mCallback.onError(e.getLocalizedMessage());
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCallback.onError(e.getLocalizedMessage());
+                        }
+                    });
                 }
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, final Response response) throws IOException {
                 if (null != mCallback) {
-                    mCallback.onResponse(response.body().string().toString());
+                    final String result = response.body().string().toString();
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCallback.onResponse(result);
+                        }
+                    });
                 }
             }
         });

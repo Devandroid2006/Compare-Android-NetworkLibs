@@ -1,13 +1,14 @@
 package network.devandroid.com.networklibrarycomparison;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -22,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import network.devandroid.com.networklibrarycomparison.internal.DataAdapter;
 import network.devandroid.com.networklibrarycomparison.internal.INetworkManager;
 import network.devandroid.com.networklibrarycomparison.internal.NetFactory;
@@ -31,7 +31,7 @@ import network.devandroid.com.networklibrarycomparison.internal.TestResultsAdapt
 import network.devandroid.com.networklibrarycomparison.models.DataModel;
 import network.devandroid.com.networklibrarycomparison.utils.Validations;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
 
@@ -59,20 +59,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        setSupportActionBar(mToolBar);
-/*
-        mUrlEtext.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    mSpinnerNetwork.performClick();
-                    return true;
-                }
-                return false;
-            }
-        });*/
+        //remove the navigation icon
+        mToolBar.setNavigationIcon(null);
 
         mSpinnerNetwork.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -91,6 +79,35 @@ public class MainActivity extends AppCompatActivity {
         mTestsEtext.setText(String.valueOf(1));
 
         checkForUpdates();
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected Toolbar getToolBar() {
+        return mToolBar;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_details:
+                //start new activity
+                ShowDetailsActivity.launch(this);
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void performSelectedNetworkTest(final int position) {
@@ -149,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
         checkForCrashes();
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -164,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
     private void unregisterManagers() {
         UpdateManager.unregister();
     }
-
 
     private void checkForCrashes() {
         CrashManager.register(this);
@@ -332,41 +347,25 @@ public class MainActivity extends AppCompatActivity {
         if (isFinishing()) {
             return;
         }
-      /*  runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (TextUtils.isEmpty(mContentTview.getText())) {
-                    mContentTview.setText(response.toString());
+        if (isAllNetworkApisFinished()) {
+            //used to calculate the avege time for each type
+            final Map<NetType, Long> avgTimeMap = new LinkedHashMap<>();
+            for (DataModel dataModel : mList) {
+                if (dataModel.getmEndTime() == 0 || "Fail".equalsIgnoreCase(dataModel.getmResult())) {
+                    //skip if end time is zero
+                    continue;
+                }
+                final NetType netType = dataModel.getmNetType();
+                final long timeTaken = dataModel.getmEndTime() - dataModel.getmStartTime();
+                if (!avgTimeMap.containsKey(netType)) {
+                    avgTimeMap.put(netType, timeTaken);
+                } else {
+                    avgTimeMap.put(netType, timeTaken + avgTimeMap.get(netType));
                 }
             }
-        });*/
-        if (isAllNetworkApisFinished()) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                  /*  if (TextUtils.isEmpty(mContentTview.getText())) {
-                        mContentTview.setText(response.toString());
-                    }*/
-                    //used to calculate the avege time for each type
-                    final Map<NetType, Long> avgTimeMap = new LinkedHashMap<>();
-                    for (DataModel dataModel : mList) {
-                        if (dataModel.getmEndTime() == 0 || "Fail".equalsIgnoreCase(dataModel.getmResult())) {
-                            //skip if end time is zero
-                            continue;
-                        }
-                        final NetType netType = dataModel.getmNetType();
-                        final long timeTaken = dataModel.getmEndTime() - dataModel.getmStartTime();
-                        if (!avgTimeMap.containsKey(netType)) {
-                            avgTimeMap.put(netType, timeTaken);
-                        } else {
-                            avgTimeMap.put(netType, timeTaken + avgTimeMap.get(netType));
-                        }
-                    }
-                    //setup results
-                    final TestResultsAdapter adapter = new TestResultsAdapter(avgTimeMap.entrySet());
-                    mResultsRcView.setAdapter(adapter);
-                }
-            });
+            //setup results
+            final TestResultsAdapter adapter = new TestResultsAdapter(avgTimeMap.entrySet());
+            mResultsRcView.setAdapter(adapter);
         }
 
     }
@@ -405,19 +404,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateList() {
         if (!isFinishing()) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
-                    if (null != adapter) {
-                        DataAdapter dataAdapter = (DataAdapter) adapter;
-                        dataAdapter.updateList(mList);
-                    } else {
-                        DataAdapter dataAdapter = new DataAdapter(mList);
-                        mRecyclerView.setAdapter(dataAdapter);
-                    }
-                }
-            });
+            final RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
+            if (null != adapter) {
+                DataAdapter dataAdapter = (DataAdapter) adapter;
+                dataAdapter.updateList(mList);
+            } else {
+                DataAdapter dataAdapter = new DataAdapter(mList);
+                mRecyclerView.setAdapter(dataAdapter);
+            }
         }
 
     }

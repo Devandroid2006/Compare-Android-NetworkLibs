@@ -7,4 +7,5 @@ public abstract class BaseNetworkManager<T> implements INetworkManager<T> {
     public BaseNetworkManager(Callback mCallback) {
         this.mCallback = mCallback;
     }
+
 }

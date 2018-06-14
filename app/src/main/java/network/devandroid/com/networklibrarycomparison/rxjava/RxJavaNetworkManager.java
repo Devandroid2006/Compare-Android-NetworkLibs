@@ -1,5 +1,7 @@
 package network.devandroid.com.networklibrarycomparison.rxjava;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -31,16 +33,26 @@ public class RxJavaNetworkManager extends BaseNetworkManager<String> {
         getStringObservable(url)
                 .subscribe(new DisposableObserver<String>() {
                     @Override
-                    public void onNext(String response) {
+                    public void onNext(final String response) {
                         if (null != mCallback) {
-                            mCallback.onResponse(response);
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mCallback.onResponse(response);
+                                }
+                            });
                         }
                     }
 
                     @Override
-                    public void onError(Throwable e) {
+                    public void onError(final Throwable e) {
                         if (null != mCallback) {
-                            mCallback.onError(e.getLocalizedMessage());
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mCallback.onError(e.getLocalizedMessage());
+                                }
+                            });
                         }
                     }
 
