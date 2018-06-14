@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">CompareNetworkLibs</string>
+    <string name="select_the_netwrok_type">Network Type</string>
+    <string name="number_of_tests">Number of Tests</string>
+    <string name="webservice">Webservice</string>
+    <string name="content_details">Content Details</string>
+    <string-array name="net_type">
+        <item>None</item>
+        <item>All</item>
+        <item>Volley</item>
+        <item>Retrofit</item>
+        <item>OkHttp</item>
+        <item>FastNetwork</item>
+        <item>AsyncTask</item>
+        <item>RxJava</item>
+    </string-array>
+</resources>
