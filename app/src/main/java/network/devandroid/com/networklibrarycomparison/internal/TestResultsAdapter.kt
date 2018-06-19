@@ -15,21 +15,13 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import network.devandroid.com.networklibrarycomparison.R
 
-class TestResultsAdapter(entries: Set<Entry<NetType, Long>>, private val mNumberOfTests: Int) : RecyclerView.Adapter<TestResultsAdapter.ViewHolder>() {
+class TestResultsAdapter(entries: Set<MutableMap.MutableEntry<NetType, Long>>, private val mNumberOfTests: Int) : RecyclerView.Adapter<TestResultsAdapter.ViewHolder>() {
 
-    private val mEntries: List<Entry<NetType, Long>>
+    private val items: List<MutableMap.MutableEntry<NetType, Long>>
 
     init {
-        this.mEntries = ArrayList<Entry<NetType, Long>>(entries)
-        //sort
-        Collections.sort<Entry<NetType, Long>>(mEntries, Comparator<Any> { left, right ->
-            if (left.value > right.value) {
-                return@Comparator 1
-            } else if (left.value < right.value) {
-                return@Comparator -1
-            }
-            0
-        })
+        this.items = ArrayList<MutableMap.MutableEntry<NetType, Long>>(entries)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,7 +30,7 @@ class TestResultsAdapter(entries: Set<Entry<NetType, Long>>, private val mNumber
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val entry = mEntries[position]
+        val entry = items[position]
         if (position == 0) {
             holder.mRootView!!.setBackgroundColor(Color.GREEN)
         } else if (position % 2 == 0) {
@@ -52,7 +44,7 @@ class TestResultsAdapter(entries: Set<Entry<NetType, Long>>, private val mNumber
     }
 
     override fun getItemCount(): Int {
-        return mEntries.size
+        return items.size
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

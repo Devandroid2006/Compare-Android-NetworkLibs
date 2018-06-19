@@ -15,7 +15,7 @@ class VolleyNetwork private constructor(context: Context) {
 
     // getApplicationContext() is key, it keeps you from leaking the
     // Activity or BroadcastReceiver if someone passes one in.
-    val requestQueue: RequestQueue
+    val requestQueue: RequestQueue?
         get() {
             if (mRequestQueue == null) {
                 mRequestQueue = Volley.newRequestQueue(mCtx.applicationContext)
@@ -42,15 +42,15 @@ class VolleyNetwork private constructor(context: Context) {
     }
 
     fun <T> addToRequestQueue(req: Request<T>) {
-        requestQueue.add(req)
+        requestQueue?.add(req)
     }
 
     companion object {
         private var mInstance: VolleyNetwork? = null
-        private var mCtx: Context
+        private lateinit var mCtx: Context
 
         @Synchronized
-        fun getInstance(context: Context): VolleyNetwork {
+        fun getInstance(context: Context): VolleyNetwork? {
             if (mInstance == null) {
                 mInstance = VolleyNetwork(context)
             }

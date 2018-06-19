@@ -24,7 +24,7 @@ enum class NetType {
             }
         }
 
-        fun getNetType(position: Int): NetType {
+        fun getNetType(position: Int): NetType? {
             return mMap[position]
         }
     }

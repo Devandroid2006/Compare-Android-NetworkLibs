@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.View
 
 import net.hockeyapp.android.CrashManager
 import net.hockeyapp.android.UpdateManager
@@ -15,7 +14,7 @@ import butterknife.Unbinder
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    private var mUnbinder: Unbinder? = null
+    private var unbinder: Unbinder? = null
 
     @get:LayoutRes
     protected abstract val layoutResource: Int
@@ -25,7 +24,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutResource)
-        mUnbinder = ButterKnife.bind(this)
+        unbinder = ButterKnife.bind(this)
 
         //setup toolbar
         val toolBar = toolBar
@@ -53,7 +52,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mUnbinder!!.unbind()
+        unbinder!!.unbind()
         unregisterManagers()
     }
 

@@ -11,7 +11,7 @@ import network.devandroid.com.networklibrarycomparison.volley.VolleyNetworkManag
 
 object NetFactory {
 
-    fun getNetworkManager(context: Context, type: NetType, callback: INetworkManager.Callback<*>): BaseNetworkManager<*>? {
+    fun getNetworkManager(context: Context, type: NetType, callback: INetworkManager.Callback): BaseNetworkManager? {
         when (type) {
             NetType.VOLLEY -> return VolleyNetworkManager(callback, context)
             NetType.RETROFIT -> return RetrofitNetworkManager(callback)

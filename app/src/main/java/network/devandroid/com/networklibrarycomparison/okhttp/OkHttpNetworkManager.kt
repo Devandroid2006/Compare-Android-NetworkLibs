@@ -6,13 +6,14 @@ import android.os.Looper
 import java.io.IOException
 
 import network.devandroid.com.networklibrarycomparison.internal.BaseNetworkManager
+import network.devandroid.com.networklibrarycomparison.internal.INetworkManager
 import okhttp3.CacheControl
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 
-class OkHttpNetworkManager(mCallback: INetworkManager.Callback<*>) : BaseNetworkManager<String>(mCallback) {
+class OkHttpNetworkManager(mCallback: INetworkManager.Callback) : BaseNetworkManager(mCallback) {
 
     override fun send(url: String) {
         val client = OkHttpClient.Builder()
@@ -24,16 +25,16 @@ class OkHttpNetworkManager(mCallback: INetworkManager.Callback<*>) : BaseNetwork
                 .build()
         client.newCall(request).enqueue(object : okhttp3.Callback {
             override fun onFailure(call: Call, e: IOException) {
-                if (null != mCallback) {
-                    Handler(Looper.getMainLooper()).post { mCallback.onError(e.localizedMessage) }
+                if (null != callback) {
+                    Handler(Looper.getMainLooper()).post { callback.onError(e.localizedMessage) }
                 }
             }
 
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
-                if (null != mCallback) {
+                if (null != callback) {
                     val result = response.body()!!.string().toString()
-                    Handler(Looper.getMainLooper()).post { mCallback.onResponse(result) }
+                    Handler(Looper.getMainLooper()).post { callback.onResponse(result) }
                 }
             }
         })

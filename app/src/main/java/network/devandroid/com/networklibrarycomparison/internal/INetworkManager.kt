@@ -1,12 +1,12 @@
 package network.devandroid.com.networklibrarycomparison.internal
 
-interface INetworkManager<T> {
+interface INetworkManager {
 
     fun send(url: String)
 
-    interface Callback<T> {
-        fun onResponse(response: T)
+    interface Callback {
+        fun onResponse(response: String)
 
-        fun onError(error: T)
+        fun onError(error: String)
     }
 }

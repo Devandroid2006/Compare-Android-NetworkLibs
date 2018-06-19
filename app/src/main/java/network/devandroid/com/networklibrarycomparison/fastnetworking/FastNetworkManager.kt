@@ -10,7 +10,7 @@ import com.androidnetworking.interfaces.StringRequestListener
 import network.devandroid.com.networklibrarycomparison.internal.BaseNetworkManager
 import network.devandroid.com.networklibrarycomparison.internal.INetworkManager
 
-class FastNetworkManager(callback: INetworkManager.Callback<*>) : BaseNetworkManager<String>(callback) {
+class FastNetworkManager(callback: INetworkManager.Callback) : BaseNetworkManager(callback) {
 
     override fun send(url: String) {
         AndroidNetworking.get(url)
@@ -19,14 +19,14 @@ class FastNetworkManager(callback: INetworkManager.Callback<*>) : BaseNetworkMan
                 .build()
                 .getAsString(object : StringRequestListener {
                     override fun onResponse(response: String) {
-                        if (null != mCallback) {
-                            Handler(Looper.getMainLooper()).post { mCallback.onResponse(response) }
+                        if (null != callback) {
+                            Handler(Looper.getMainLooper()).post { callback.onResponse(response) }
                         }
                     }
 
                     override fun onError(anError: ANError) {
-                        if (null != mCallback) {
-                            Handler(Looper.getMainLooper()).post { mCallback.onError(anError.localizedMessage) }
+                        if (null != callback) {
+                            Handler(Looper.getMainLooper()).post { callback.onError(anError.localizedMessage) }
                         }
                     }
                 })

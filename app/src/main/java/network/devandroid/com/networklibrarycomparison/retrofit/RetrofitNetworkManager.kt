@@ -7,6 +7,7 @@ import java.io.IOException
 
 import network.devandroid.com.networklibrarycomparison.ICommonConstants
 import network.devandroid.com.networklibrarycomparison.internal.BaseNetworkManager
+import network.devandroid.com.networklibrarycomparison.internal.INetworkManager
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -14,7 +15,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitNetworkManager(callback: INetworkManager.Callback<*>) : BaseNetworkManager<String>(callback) {
+class RetrofitNetworkManager(callback: INetworkManager.Callback) : BaseNetworkManager(callback) {
 
     private//disable cache
     val retrofit: Retrofit
@@ -35,10 +36,10 @@ class RetrofitNetworkManager(callback: INetworkManager.Callback<*>) : BaseNetwor
     override fun send(url: String) {
         retrofitService.photoList.enqueue(object : retrofit2.Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (null != mCallback) {
+                if (null != callback) {
                     Handler(Looper.getMainLooper()).post {
                         try {
-                            mCallback.onResponse(response.body()!!.string().toString())
+                            callback.onResponse(response.body()!!.string().toString())
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }
@@ -47,8 +48,8 @@ class RetrofitNetworkManager(callback: INetworkManager.Callback<*>) : BaseNetwor
             }
 
             override fun onFailure(call: Call<ResponseBody>, throwable: Throwable) {
-                if (null != mCallback) {
-                    Handler(Looper.getMainLooper()).post { mCallback.onError(throwable.localizedMessage) }
+                if (null != callback) {
+                    Handler(Looper.getMainLooper()).post { callback.onError(throwable.localizedMessage) }
                 }
             }
         })

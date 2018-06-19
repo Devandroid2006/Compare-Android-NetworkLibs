@@ -3,37 +3,33 @@ package network.devandroid.com.networklibrarycomparison.rxjava
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-
-import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
-
 import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import network.devandroid.com.networklibrarycomparison.internal.BaseNetworkManager
+import network.devandroid.com.networklibrarycomparison.internal.INetworkManager
+import java.io.*
+import java.net.HttpURLConnection
+import java.net.URL
 
-class RxJavaNetworkManager(mCallback: INetworkManager.Callback<*>) : BaseNetworkManager<String>(mCallback) {
+class RxJavaNetworkManager : BaseNetworkManager {
+
+    constructor(callback: INetworkManager.Callback) : super(callback)
 
     override fun send(url: String) {
         getStringObservable(url)
                 .subscribe(object : DisposableObserver<String>() {
                     override fun onNext(response: String) {
-                        if (null != mCallback) {
-                            Handler(Looper.getMainLooper()).post { mCallback.onResponse(response) }
+                        if (null != callback) {
+                            Handler(Looper.getMainLooper()).post { callback.onResponse(response) }
                         }
                     }
 
                     override fun onError(e: Throwable) {
-                        if (null != mCallback) {
-                            Handler(Looper.getMainLooper()).post { mCallback.onError(e.localizedMessage) }
+                        if (null != callback) {
+                            Handler(Looper.getMainLooper()).post { callback.onError(e.localizedMessage) }
                         }
                     }
 
@@ -58,7 +54,7 @@ class RxJavaNetworkManager(mCallback: INetworkManager.Callback<*>) : BaseNetwork
         }
 
         Log.d(TAG, "doInBackground: END")
-        return output
+        return output!!
     }
 
     private fun readStream(`in`: InputStream): String {
@@ -66,9 +62,10 @@ class RxJavaNetworkManager(mCallback: INetworkManager.Callback<*>) : BaseNetwork
         val response = StringBuffer()
         try {
             reader = BufferedReader(InputStreamReader(`in`))
-            var line = ""
-            while ((line = reader.readLine()) != null) {
+            var line:String = reader.readLine();
+            while (line != null) {
                 response.append(line)
+                line=reader.readLine()
             }
         } catch (e: IOException) {
             e.printStackTrace()

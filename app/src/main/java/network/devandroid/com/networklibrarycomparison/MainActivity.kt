@@ -29,8 +29,7 @@ import network.devandroid.com.networklibrarycomparison.utils.Validations
 class MainActivity : BaseActivity() {
 
     @BindView(R.id.toolBar)
-    protected override var toolBar: Toolbar? = null
-        internal set
+    override var toolBar: Toolbar? = null
 
     @BindView(R.id.urlEtext)
     internal var mUrlEtext: AppCompatEditText? = null
@@ -151,7 +150,7 @@ class MainActivity : BaseActivity() {
         dataModel.setmStartTime(System.currentTimeMillis())
         dataModel.setmNetType(NetType.RXJAVA)
         NetFactory.getNetworkManager(this, NetType.RXJAVA, object : INetworkManager.Callback {
-            override fun onResponse(response: Any) {
+            override fun onResponse(response: String) {
                 Log.d(TAG, "onResponse() called with: response = [$response]")
                 dataModel.setmEndTime(System.currentTimeMillis())
                 dataModel.setmResult("success")
@@ -160,7 +159,7 @@ class MainActivity : BaseActivity() {
                 updateTheBottomSheeContent(response)
             }
 
-            override fun onError(error: Any) {
+            override fun onError(error: String) {
                 Log.d(TAG, "onError() called with: error = [$error]")
                 dataModel.setmEndTime(System.currentTimeMillis())
                 dataModel.setmResult("fail")
@@ -175,7 +174,7 @@ class MainActivity : BaseActivity() {
         dataModel.setmStartTime(System.currentTimeMillis())
         dataModel.setmNetType(NetType.ASYNC_TASK)
         NetFactory.getNetworkManager(applicationContext, NetType.ASYNC_TASK, object : INetworkManager.Callback {
-            override fun onResponse(response: Any) {
+            override fun onResponse(response: String) {
                 Log.d(TAG, "onResponse() called with: response = [$response]")
                 dataModel.setmEndTime(System.currentTimeMillis())
                 dataModel.setmResult("success")
@@ -184,7 +183,7 @@ class MainActivity : BaseActivity() {
                 updateTheBottomSheeContent(response)
             }
 
-            override fun onError(error: Any) {
+            override fun onError(error: String) {
                 Log.d(TAG, "onError() called with: error = [$error]")
                 dataModel.setmEndTime(System.currentTimeMillis())
                 dataModel.setmResult("fail")
@@ -199,7 +198,7 @@ class MainActivity : BaseActivity() {
         dataModel.setmStartTime(System.currentTimeMillis())
         dataModel.setmNetType(NetType.FAST_NETWORK)
         NetFactory.getNetworkManager(this, NetType.FAST_NETWORK, object : INetworkManager.Callback {
-            override fun onResponse(response: Any) {
+            override fun onResponse(response: String) {
                 Log.d(TAG, "onResponse() called with: response = [$response]")
                 dataModel.setmEndTime(System.currentTimeMillis())
                 dataModel.setmResult("success")
@@ -208,7 +207,7 @@ class MainActivity : BaseActivity() {
                 updateTheBottomSheeContent(response)
             }
 
-            override fun onError(error: Any) {
+            override fun onError(error: String) {
                 Log.d(TAG, "onError() called with: error = [$error]")
                 dataModel.setmEndTime(System.currentTimeMillis())
                 dataModel.setmResult("fail")
@@ -223,7 +222,7 @@ class MainActivity : BaseActivity() {
         dataModel.setmStartTime(System.currentTimeMillis())
         dataModel.setmNetType(NetType.OK_HTTP)
         NetFactory.getNetworkManager(this, NetType.OK_HTTP, object : INetworkManager.Callback {
-            override fun onResponse(response: Any) {
+            override fun onResponse(response: String) {
                 Log.d(TAG, "onResponse() called with: response = [$response]")
                 dataModel.setmEndTime(System.currentTimeMillis())
                 dataModel.setmResult("success")
@@ -232,7 +231,7 @@ class MainActivity : BaseActivity() {
                 updateTheBottomSheeContent(response)
             }
 
-            override fun onError(error: Any) {
+            override fun onError(error: String) {
                 Log.d(TAG, "onError() called with: error = [$error]")
                 dataModel.setmEndTime(System.currentTimeMillis())
                 dataModel.setmResult("fail")
@@ -248,7 +247,7 @@ class MainActivity : BaseActivity() {
         dataModel.setmStartTime(System.currentTimeMillis())
         dataModel.setmNetType(NetType.RETROFIT)
         NetFactory.getNetworkManager(this, NetType.RETROFIT, object : INetworkManager.Callback {
-            override fun onResponse(response: Any) {
+            override fun onResponse(response: String) {
                 Log.d(TAG, "onResponse() called with: response = [$response]")
                 dataModel.setmEndTime(System.currentTimeMillis())
                 dataModel.setmResult("success")
@@ -257,7 +256,7 @@ class MainActivity : BaseActivity() {
                 updateTheBottomSheeContent(response)
             }
 
-            override fun onError(error: Any) {
+            override fun onError(error: String) {
                 Log.d(TAG, "onError() called with: error = [$error]")
                 dataModel.setmEndTime(System.currentTimeMillis())
                 dataModel.setmResult("fail")
@@ -273,7 +272,7 @@ class MainActivity : BaseActivity() {
         dataModel.setmNetType(NetType.VOLLEY)
         NetFactory.getNetworkManager(this, NetType.VOLLEY, object : INetworkManager.Callback {
 
-            override fun onResponse(response: Any) {
+            override fun onResponse(response: String) {
                 Log.d(TAG, "onResponse() called with: response = [$response]")
                 dataModel.setmEndTime(System.currentTimeMillis())
                 dataModel.setmResult("success")
@@ -282,7 +281,7 @@ class MainActivity : BaseActivity() {
                 updateTheBottomSheeContent(response)
             }
 
-            override fun onError(error: Any) {
+            override fun onError(error: String) {
                 Log.d(TAG, "onError() called with: error = [$error]")
                 dataModel.setmEndTime(System.currentTimeMillis())
                 dataModel.setmResult("fail")
@@ -292,7 +291,7 @@ class MainActivity : BaseActivity() {
         })!!.send(url)
     }
 
-    private fun updateTheBottomSheeContent(response: Any) {
+    private fun updateTheBottomSheeContent(response: String) {
         if (isFinishing) {
             return
         }
@@ -304,12 +303,13 @@ class MainActivity : BaseActivity() {
                     //skip if end time is zero
                     continue
                 }
-                val netType = dataModel.getmNetType()
-                val timeTaken = dataModel.getmEndTime() - dataModel.getmStartTime()
+                val netType: NetType= dataModel.getmNetType()!!
+
+                val timeTaken:Long = dataModel.getmEndTime() - dataModel.getmStartTime()
                 if (!avgTimeMap.containsKey(netType)) {
                     avgTimeMap[netType] = timeTaken
                 } else {
-                    avgTimeMap[netType] = timeTaken + avgTimeMap[netType]
+                    avgTimeMap[netType] = timeTaken + avgTimeMap[netType]!!.toLong()
                 }
             }
 

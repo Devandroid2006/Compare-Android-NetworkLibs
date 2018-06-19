@@ -23,7 +23,6 @@ class ShowDetailsActivity : BaseActivity() {
 
     @BindView(R.id.toolBar)
     protected override var toolBar: Toolbar? = null
-        internal set
 
     @BindView(R.id.progressBar)
     internal var mProgressBar: ProgressBar? = null
@@ -58,7 +57,7 @@ class ShowDetailsActivity : BaseActivity() {
         if (Validations.isValidUrl(url)) {
             mProgressBar!!.visibility = View.VISIBLE
             NetFactory.getNetworkManager(this, NetType.VOLLEY, object : INetworkManager.Callback {
-                override fun onResponse(response: Any) {
+                override fun onResponse(response: String) {
                     if (isFinishing) {
                         return
                     }
@@ -66,7 +65,7 @@ class ShowDetailsActivity : BaseActivity() {
                     mProgressBar!!.visibility = View.GONE
                 }
 
-                override fun onError(error: Any) {
+                override fun onError(error: String) {
                     if (isFinishing) {
                         return
                     }
