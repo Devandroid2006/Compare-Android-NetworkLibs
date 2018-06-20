@@ -25,9 +25,9 @@ class DataAdapter(private var mList: List<DataModel>?) : RecyclerView.Adapter<Da
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val dataModel = mList!![position]
-        holder.mTitle!!.text = dataModel.getmNetType()!!.name
-        holder.mResult!!.text = dataModel.getmResult()
-        holder.mValue!!.text = (dataModel.getmEndTime() - dataModel.getmStartTime()).toString()
+        holder.mTitle.text = dataModel.getmNetType()!!.name
+        holder.mResult.text = dataModel.getmResult()
+        holder.mValue.text = (dataModel.getmEndTime() - dataModel.getmStartTime()).toString()
     }
 
     override fun getItemCount(): Int {
@@ -37,13 +37,13 @@ class DataAdapter(private var mList: List<DataModel>?) : RecyclerView.Adapter<Da
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         @BindView(R.id.title)
-        internal var mTitle: TextView? = null
+        lateinit var mTitle: TextView
 
         @BindView(R.id.value)
-        internal var mValue: TextView? = null
+        lateinit var mValue: TextView
 
         @BindView(R.id.result)
-        internal var mResult: TextView? = null
+        lateinit var mResult: TextView
 
         init {
             ButterKnife.bind(this, itemView)

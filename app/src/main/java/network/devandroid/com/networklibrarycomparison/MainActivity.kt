@@ -29,28 +29,31 @@ import network.devandroid.com.networklibrarycomparison.utils.Validations
 class MainActivity : BaseActivity() {
 
     @BindView(R.id.toolBar)
-    override var toolBar: Toolbar? = null
+    lateinit var toolbar: Toolbar
 
     @BindView(R.id.urlEtext)
-    internal var mUrlEtext: AppCompatEditText? = null
+    lateinit var mUrlEtext: AppCompatEditText
 
     @BindView(R.id.testsEtext)
-    internal var mTestsEtext: AppCompatEditText? = null
+    lateinit var mTestsEtext: AppCompatEditText
 
     @BindView(R.id.spinner_network)
-    internal var mSpinnerNetwork: AppCompatSpinner? = null
+    lateinit var mSpinnerNetwork: AppCompatSpinner
 
     @BindView(R.id.recyclerView)
-    internal var mRecyclerView: RecyclerView? = null
+    lateinit var mRecyclerView: RecyclerView
 
     @BindView(R.id.results_rcview)
-    internal var mResultsRcView: RecyclerView? = null
+    lateinit var mResultsRcView: RecyclerView
 
     //used to hold data model for each request
     private val mList = Collections.synchronizedList(ArrayList<DataModel>())
 
     protected override val layoutResource: Int
         get() = R.layout.activity_main
+
+    override val getToolBar: Toolbar
+        get() = toolbar
 
     private val isAllNetworkApisFinished: Boolean
         @Synchronized get() {
@@ -77,7 +80,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //remove the navigation icon
-        toolBar!!.navigationIcon = null
+        toolbar!!.navigationIcon = null
 
         mSpinnerNetwork!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {

@@ -32,15 +32,15 @@ class TestResultsAdapter(entries: Set<MutableMap.MutableEntry<NetType, Long>>, p
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val entry = items[position]
         if (position == 0) {
-            holder.mRootView!!.setBackgroundColor(Color.GREEN)
+            holder.mRootView.setBackgroundColor(Color.GREEN)
         } else if (position % 2 == 0) {
-            holder.mRootView!!.setBackgroundColor(Color.WHITE)
+            holder.mRootView.setBackgroundColor(Color.WHITE)
         } else {
-            holder.mRootView!!.setBackgroundColor(Color.YELLOW)
+            holder.mRootView.setBackgroundColor(Color.YELLOW)
         }
-        holder.mResult!!.text = ":"
-        holder.mTitle!!.setText(entry.key.name)
-        holder.mValue!!.setText((entry.value / mNumberOfTests).toString())
+        holder.mResult.text = ":"
+        holder.mTitle.setText(entry.key.name)
+        holder.mValue.setText((entry.value / mNumberOfTests).toString())
     }
 
     override fun getItemCount(): Int {
@@ -50,17 +50,17 @@ class TestResultsAdapter(entries: Set<MutableMap.MutableEntry<NetType, Long>>, p
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         @BindView(R.id.title)
-        internal var mTitle: TextView? = null
+        lateinit var mTitle: TextView
 
         @BindView(R.id.result)
-        internal var mResult: TextView? = null
+        lateinit var mResult: TextView
 
         @BindView(R.id.value)
-        internal var mValue: TextView? = null
+        lateinit var mValue: TextView
 
 
         @BindView(R.id.root_view)
-        internal var mRootView: View? = null
+        lateinit var mRootView: View
 
         init {
             ButterKnife.bind(this, itemView)

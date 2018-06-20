@@ -46,7 +46,7 @@ open class FetchAsyncTask(private val mUrl: String) : AsyncTask<Void, Void, Stri
         val response = StringBuffer()
         try {
             reader = BufferedReader(InputStreamReader(`in`))
-            var line:String = reader.readLine()
+            var line:String? = reader.readLine()
             while (line  != null) {
                 response.append(line)
                 line = reader.readLine()

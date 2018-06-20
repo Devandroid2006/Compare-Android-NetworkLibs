@@ -19,7 +19,7 @@ abstract class BaseActivity : AppCompatActivity() {
     @get:LayoutRes
     protected abstract val layoutResource: Int
 
-    protected abstract val toolBar: Toolbar?
+    protected abstract val getToolBar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,11 +27,10 @@ abstract class BaseActivity : AppCompatActivity() {
         unbinder = ButterKnife.bind(this)
 
         //setup toolbar
-        val toolBar = toolBar
-        if (toolBar != null) {
-            setSupportActionBar(toolBar)
-            toolBar.setNavigationIcon(R.drawable.ic_nav_back)
-            toolBar.setNavigationOnClickListener {
+        if (getToolBar != null) {
+            setSupportActionBar(getToolBar)
+            getToolBar.setNavigationIcon(R.drawable.ic_nav_back)
+            getToolBar.setNavigationOnClickListener {
                 //default call backpress
                 onBackPressed()
             }

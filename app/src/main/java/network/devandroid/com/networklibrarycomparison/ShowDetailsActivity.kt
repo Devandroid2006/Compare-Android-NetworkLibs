@@ -22,19 +22,22 @@ import network.devandroid.com.networklibrarycomparison.utils.Validations
 class ShowDetailsActivity : BaseActivity() {
 
     @BindView(R.id.toolBar)
-    protected override var toolBar: Toolbar? = null
+    lateinit var toolBar:Toolbar;
 
     @BindView(R.id.progressBar)
-    internal var mProgressBar: ProgressBar? = null
+    lateinit var mProgressBar: ProgressBar
 
     @BindView(R.id.details_tview)
-    internal var mDetailsTview: TextView? = null
+    lateinit var mDetailsTview: TextView
 
     @BindView(R.id.url_etext)
-    internal var mUrlEtView: TextInputEditText? = null
+    lateinit var mUrlEtView: TextInputEditText
 
-    protected override val layoutResource: Int
+    override val layoutResource: Int
         get() = R.layout.activity_show_details
+
+    override val getToolBar: Toolbar
+        get() = toolBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
