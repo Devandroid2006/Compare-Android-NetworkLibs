@@ -20,8 +20,8 @@ class TestResultsAdapter(entries: Set<MutableMap.MutableEntry<NetType, Long>>, p
     private val items: List<MutableMap.MutableEntry<NetType, Long>>
 
     init {
-        this.items = ArrayList<MutableMap.MutableEntry<NetType, Long>>(entries)
-
+        val sortedWith = entries.sortedWith(compareBy({ it.value }));
+        items = ArrayList<MutableMap.MutableEntry<NetType, Long>>(sortedWith)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

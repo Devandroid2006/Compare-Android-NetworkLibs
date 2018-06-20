@@ -339,7 +339,8 @@ class MainActivity : BaseActivity() {
             val adapter = mRecyclerView!!.adapter
             if (null != adapter) {
                 val dataAdapter = adapter as DataAdapter
-                dataAdapter.updateList(mList)
+                val sorted=mList!!.sortedWith(compareBy({ (it.getmEndTime() - it.getmStartTime()) }))
+                dataAdapter.updateList(sorted)
             } else {
                 val dataAdapter = DataAdapter(mList)
                 mRecyclerView!!.adapter = dataAdapter
