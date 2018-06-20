@@ -11,6 +11,8 @@
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:layout_marginEnd="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_60dp"
         android:orientation="vertical">
 
