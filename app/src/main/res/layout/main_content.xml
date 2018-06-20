@@ -79,15 +79,17 @@
 
             <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dimen_50dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="@dimen/dimen_8dp">
+                android:paddingEnd="@dimen/dimen_8dp"
+                android:paddingStart="@dimen/dimen_8dp">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="start|center_vertical"
                     android:text="@string/networktype"
                     android:textColor="@color/hockeyapp_text_white" />
 
@@ -103,6 +105,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="end|center_vertical"
                     android:text="@string/time_in_millis"
                     android:textColor="@color/hockeyapp_text_white" />
             </android.support.v7.widget.LinearLayoutCompat>

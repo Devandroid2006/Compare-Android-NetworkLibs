@@ -3,13 +3,26 @@
     <string name="select_the_netwrok_type">Network Type</string>
     <string name="number_of_tests">Number of Tests</string>
     <string name="webservice">Webservice</string>
-    <string name="content_details">Test Details</string>
+    <string name="content_details">Average Time Taken(in Millis)</string>
     <string name="err_invalid_url">Please enter valid GET URL</string>
-    <string name="details">Details</string>
+    <string name="action_details">Details</string>
     <string name="test_screen">Test WebService</string>
     <string name="networktype">NetworkType</string>
     <string name="status">Status</string>
     <string name="time_in_millis">Time (in millis)</string>
+    <string name="action_help">Help</string>
+    <string name="feedback">Feedback</string>
+    <string name="action_exit">Exit</string>
+    <!--Help Content-->
+    <string name="help_content"><![CDATA[
+          1. Enter the URL and the Number of tests or requests.
+     \n\n 2. Select Type of Library to execute.
+    \n\n  3. Observe the Each Request completed time in millis.
+     \n\n 4. In the BottomSheet you can also check for the average time of each library.
+     \n\n 5. Check in the details screen for the content of GET URL.
+     \n\n 6. Please provide feedback if any changes required or for any improvements.
+    ]]>
+    </string>
     <string-array name="net_type">
         <item>None</item>
         <item>All</item>
@@ -20,4 +33,5 @@
         <item>AsyncTask</item>
         <item>RxJava</item>
     </string-array>
+
 </resources>

@@ -1,6 +1,8 @@
 package network.devandroid.com.networklibrarycomparison
 
+import android.app.ActionBar
 import android.os.Bundle
+import android.support.design.widget.BottomSheetDialog
 import android.support.v7.widget.AppCompatEditText
 import android.support.v7.widget.AppCompatSpinner
 import android.support.v7.widget.RecyclerView
@@ -18,6 +20,7 @@ import java.util.Collections
 import java.util.LinkedHashMap
 
 import butterknife.BindView
+import net.hockeyapp.android.FeedbackManager
 import network.devandroid.com.networklibrarycomparison.internal.DataAdapter
 import network.devandroid.com.networklibrarycomparison.internal.INetworkManager
 import network.devandroid.com.networklibrarycomparison.internal.NetFactory
@@ -96,6 +99,9 @@ class MainActivity : BaseActivity() {
         mUrlEtext!!.setText(ICommonConstants.URL)
         mTestsEtext!!.setText(1.toString())
 
+        //register for feedback
+        FeedbackManager.register(this);
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -105,11 +111,27 @@ class MainActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_details ->
+            R.id.action_details -> {
                 //start new activity
                 ShowDetailsActivity.launch(this)
-            else -> {
             }
+            R.id.action_feedback -> {
+                //show hockey app feedback
+                FeedbackManager.showFeedbackActivity(this);
+            }
+            R.id.action_help -> {
+                //show help content
+                val dialog = BottomSheetDialog(this)
+                dialog.setContentView(R.layout.layout_help)
+                //set to full screen
+                dialog.setOnShowListener { window.setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT) }
+                dialog.show()
+            }
+            R.id.action_exit -> {
+                finish()
+                //close the application
+            }
+
         }
         return super.onOptionsItemSelected(item)
     }
@@ -306,9 +328,9 @@ class MainActivity : BaseActivity() {
                     //skip if end time is zero
                     continue
                 }
-                val netType: NetType= dataModel.getmNetType()!!
+                val netType: NetType = dataModel.getmNetType()!!
 
-                val timeTaken:Long = dataModel.getmEndTime() - dataModel.getmStartTime()
+                val timeTaken: Long = dataModel.getmEndTime() - dataModel.getmStartTime()
                 if (!avgTimeMap.containsKey(netType)) {
                     avgTimeMap[netType] = timeTaken
                 } else {
@@ -339,7 +361,7 @@ class MainActivity : BaseActivity() {
             val adapter = mRecyclerView!!.adapter
             if (null != adapter) {
                 val dataAdapter = adapter as DataAdapter
-                val sorted=mList!!.sortedWith(compareBy({ (it.getmEndTime() - it.getmStartTime()) }))
+                val sorted = mList!!.sortedWith(compareBy({ (it.getmEndTime() - it.getmStartTime()) }))
                 dataAdapter.updateList(sorted)
             } else {
                 val dataAdapter = DataAdapter(mList)
