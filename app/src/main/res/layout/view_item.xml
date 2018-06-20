@@ -9,8 +9,9 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dimen_8dp">
+        android:layout_height="@dimen/dimen_56dp"
+        android:paddingEnd="@dimen/dimen_8dp"
+        android:paddingStart="@dimen/dimen_8dp">
 
         <TextView
             android:id="@+id/title"
@@ -19,6 +20,7 @@
             android:layout_weight="1"
             android:text="title"
             android:textAllCaps="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="@id/value"
@@ -30,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Result"
+            app:layout_constraintBaseline_toBaselineOf="@id/title"
             app:layout_constraintEnd_toEndOf="@id/value"
             app:layout_constraintLeft_toRightOf="@id/title"
             app:layout_constraintStart_toStartOf="@id/title"
@@ -41,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="value"
+            app:layout_constraintBaseline_toBaselineOf="@id/title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintLeft_toRightOf="@id/title" />

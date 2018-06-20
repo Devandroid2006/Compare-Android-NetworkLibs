@@ -8,4 +8,6 @@
     <dimen name="dimen_3dp">3dp</dimen>
     <dimen name="dimen_60dp">60dp</dimen>
     <dimen name="dimen_5dp">5dp</dimen>
+    <dimen name="dimen_56dp">56dp</dimen>
+    <dimen name="dimen_500dp">500dp</dimen>
 </resources>

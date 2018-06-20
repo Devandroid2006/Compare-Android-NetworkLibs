@@ -30,7 +30,7 @@
         </activity>
         <activity
             android:name=".ShowDetailsActivity"
-            android:label="@string/details"
+            android:label="@string/action_details"
             android:launchMode="singleTop" />
     </application>
 
